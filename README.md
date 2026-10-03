@@ -20,7 +20,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/PedroGLorenzo/local-node-sentinel.git](https://github.com/PedroGLorenzo/local-node-sentinel.git)
+   git clone (https://github.com/PedroGLorenzo/local-node-sentinel.git)
    cd local-node-sentinel
 
 2. **Build and spin up the containers:**
@@ -46,6 +46,6 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Author
 
-**Pedro García Lorenzo**[cite: 1]
-* GitHub: [@PedroGLorenzo](https://github.com/PedroGLorenzo)[cite: 1]
-* Email: pedro.glorenzo@udc.es[cite: 1]
+**Pedro García Lorenzo**
+* GitHub: [@PedroGLorenzo](https://github.com/PedroGLorenzo)
+* Email: pedro.glorenzo@udc.es
