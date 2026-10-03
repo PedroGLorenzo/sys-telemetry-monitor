@@ -1,10 +1,16 @@
 import psutil
+import os
+
+# Forzar a psutil a leer el /proc del sistema operativo anfitrión (Host)
+if os.path.exists('/host/proc'):
+    psutil.PROCFS_PATH = '/host/proc'
+
 import sqlite3
 import time
 from datetime import datetime
 
 def init_db():
-    conn = sqlite3.connect('../data/metrics.db')
+    conn = sqlite3.connect('/app/data/metrics.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS system_metrics
                  (timestamp TEXT, cpu_percent REAL, ram_percent REAL)''')

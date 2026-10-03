@@ -1,26 +1,33 @@
-version: '3.8'
 services:
   collector:
     build: .
     command: python src/collector.py
+    restart: unless-stopped
+    environment:
+      - PROCFS_PATH=/host/proc
     volumes:
-      - ./data:/app/data
+      - sentinel_data:/app/data    # <--- Usar volumen nombrado en lugar de ruta relativa
       - /proc:/host/proc:ro
       
   detector:
     build: .
     command: python src/detector.py
+    restart: unless-stopped
     volumes:
-      - ./data:/app/data
+      - sentinel_data:/app/data    # <--- Mismo volumen nombrado
     depends_on:
       - collector
 
   dashboard:
     build: .
     command: streamlit run src/dashboard.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped
     ports:
       - "8501:8501"
     volumes:
-      - ./data:/app/data
+      - sentinel_data:/app/data    # <--- Mismo volumen nombrado
     depends_on:
       - collector
+
+volumes:
+  sentinel_data:                   # <--- Docker gestiona este espacio de forma persistente y segura en OMV

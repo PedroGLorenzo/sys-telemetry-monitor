@@ -4,10 +4,9 @@ from sklearn.ensemble import IsolationForest
 import time
 import os
 
-DB_PATH = 'data/metrics.db'
 
 def init_alerts_db():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect('/app/data/metrics.db')
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS alerts
                  (timestamp TEXT, cpu_percent REAL, ram_percent REAL, status TEXT)''')

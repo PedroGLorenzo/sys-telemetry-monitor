@@ -2,8 +2,9 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 import time
+import altair as alt
 
-DB_PATH = 'data/metrics.db'
+DB_PATH = '/app/data/metrics.db'
 
 st.set_page_config(page_title="Node Sentinel", layout="wide")
 st.title("E2E System Telemetry Monitor")
@@ -29,17 +30,26 @@ if not metrics_df.empty:
     
     with col1:
         st.subheader("CPU usage (%)")
-        st.line_chart(metrics_df.set_index('timestamp')['cpu_percent'])
+        cpu_chart = alt.Chart(metrics_df).mark_line(color='#ff4b4b').encode(
+            x=alt.X('timestamp:T', title='Hora', axis=alt.Axis(format='%H:%M:%S', tickCount=6)),
+            y=alt.Y('cpu_percent:Q', scale=alt.Scale(domain=[0, 100]), title='CPU %')
+        )
+        st.altair_chart(cpu_chart, use_container_width=True)
         
     with col2:
         st.subheader("RAM usage (%)")
-        st.line_chart(metrics_df.set_index('timestamp')['ram_percent'])
+        ram_chart = alt.Chart(metrics_df).mark_line(color='#0068c9').encode(
+            x=alt.X('timestamp:T', title='Hora', axis=alt.Axis(format='%H:%M:%S', tickCount=6)),
+            y=alt.Y('ram_percent:Q', scale=alt.Scale(domain=[0, 100]), title='RAM %')
+        )
+        st.altair_chart(ram_chart, use_container_width=True)
 
     st.divider()
     
     # Motor de Alertas
     st.subheader("Latest detected alerts (ML)")
     if not alerts_df.empty:
+        alerts_df['timestamp'] = pd.to_datetime(alerts_df['timestamp']).dt.strftime('%d/%m/%Y %H:%M:%S')
         st.dataframe(alerts_df, use_container_width=True)
     else:
         st.success("The system is operating within normal parameters. No alerts detected.")
