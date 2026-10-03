@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  collector:
+    build: .
+    command: python src/collector.py
+    volumes:
+      - ./data:/app/data
+      - /proc:/host/proc:ro
+      
+  detector:
+    build: .
+    command: python src/detector.py
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - collector
+
+  dashboard:
+    build: .
+    command: streamlit run src/dashboard.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - collector
